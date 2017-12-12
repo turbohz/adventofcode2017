@@ -1,5 +1,10 @@
 open System
 
+let parsed c =
+    match Int32.TryParse (string c) with
+    | (true , i) -> Some i
+    | (false, _) -> None
+
 let firstValueIfEqualToLast l =
     let first = l |> List.head
     let last = l |> List.rev |> List.head
@@ -13,7 +18,7 @@ let rec collectSumOfEqualPairs s l =
         let v = if x1=x2 then x1 else 0
         collectSumOfEqualPairs (s+v) (x2::xs)
 
-let input = Console.ReadLine() |> List.ofSeq |> List.map (int >> (+) -48)
+let input = Console.ReadLine() |> List.ofSeq |> List.choose parsed
 
 // We apply a divide an conquer approach:
 // - collect the sum of equal pairs
