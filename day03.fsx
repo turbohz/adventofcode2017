@@ -42,26 +42,22 @@ let rec spiralSeq (c:Coordinate) (d:Direction) : seq<Coordinate> =
     let next (x,y) d = 
         match d with
         | Right n -> 
-            (x+n,y),
             seq{for x' in x+1 .. x+n -> x',y}, 
             Up n
         | Up    n -> 
-            (x,y+n),
             seq{for y' in y+1 .. y+n -> x,y'}, 
             Left (n+1)
         | Left  n -> 
-            (x-n,y),
             seq{for x' in x-1 .. -1 .. x-n -> x',y}, 
             Down n
         | Down  n -> 
-            (x,y-n),
             seq{for y' in y-1 .. -1 .. y-n -> x,y'}, 
             Right (n+1)
 
     seq {
-        let c', cs, d' = next c d
+        let cs, d' = next c d
         yield! cs // current side
-        yield! spiralSeq c' d' // next side
+        yield! spiralSeq (Seq.last cs) d' // next side
     }
 
 let spiral n = seq { yield (0,0); yield! Seq.take (n-1) (spiralSeq (0,0) (Right 1)) }
