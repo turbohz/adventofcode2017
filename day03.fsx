@@ -62,12 +62,10 @@ let rec spiralSeq (c:Coordinate) (d:Direction) : seq<Coordinate> =
 
 let spiral n = seq { yield (0,0); yield! Seq.take (n-1) (spiralSeq (0,0) (Right 1)) }
 
-let manhattanDistance n =
-    let x,y = (spiral n |> Seq.item (n-1))
-    abs x + abs y
+let manhattanDistance (x1,y1) (x2,y2) = abs x2-x1 + abs y2-y1
 
 let input = Console.ReadLine()
-let output = input |> int |> manhattanDistance 
+let output = input |> int |> spiral |>Seq.last |> manhattanDistance (0,0)
 
 printfn "%i" output
 exit 0
