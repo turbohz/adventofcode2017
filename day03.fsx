@@ -1,8 +1,6 @@
 open System
 
-
 (*
-
 The approach is to move the complexity
 to the "spiral" structure itseld, and 
 make easy to compute the Manhattan distance.
@@ -26,7 +24,6 @@ So:
     ; ( 1,-1) // 9
     ; ( 2,-1) // 10
     ]
-
 *)
 
 type Direction = 
@@ -38,21 +35,13 @@ type Direction =
 type Coordinate = int * int
 
 // This was not the simplest Seq practice!
-let rec spiralSeq (c:Coordinate) (d:Direction) : seq<Coordinate> = 
-    let next (x,y) d = 
+let rec spiralSeq (c:Coordinate) (d:Direction) : Coordinate seq = 
+    let inline next (x,y) d = 
         match d with
-        | Right n -> 
-            seq{for x' in x+1 .. x+n -> x',y}, 
-            Up n
-        | Up    n -> 
-            seq{for y' in y+1 .. y+n -> x,y'}, 
-            Left (n+1)
-        | Left  n -> 
-            seq{for x' in x-1 .. -1 .. x-n -> x',y}, 
-            Down n
-        | Down  n -> 
-            seq{for y' in y-1 .. -1 .. y-n -> x,y'}, 
-            Right (n+1)
+        | Right n -> seq{for x' in x+1 .. x+n -> x',y}      , Up n
+        | Up    n -> seq{for y' in y+1 .. y+n -> x,y'}      , Left (n+1)
+        | Left  n -> seq{for x' in x-1 .. -1 .. x-n -> x',y}, Down n
+        | Down  n -> seq{for y' in y-1 .. -1 .. y-n -> x,y'}, Right (n+1)
 
     seq {
         let cs, d' = next c d
