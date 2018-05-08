@@ -19,3 +19,16 @@ module Stdin =
                 None
 
         Seq.unfold read reader
+
+module Parser =
+    open System
+    let maybeInt (x:'T) : int option =
+        box x
+        |> function
+            | :? char as c   -> string c
+            | :? string as s -> s
+            | _ -> "Unexpected" // reject anything else
+        |> Int32.TryParse        
+        |> function
+            | (true , i) -> Some i
+            | (false, _) -> None
