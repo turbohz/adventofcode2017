@@ -1,8 +1,8 @@
 namespace Util
 
-module Stdin =
+open System
 
-    open System
+module Stdin =
 
     let internal (|Line|_|) (r:IO.TextReader) = if r.Peek() = -1 then None else Some (r.ReadLine())
     let lines : string seq =
@@ -20,15 +20,10 @@ module Stdin =
 
         Seq.unfold read reader
 
-module Parser =
-    open System
-    let maybeInt (x:'T) : int option =
-        box x
-        |> function
-            | :? char as c   -> string c
-            | :? string as s -> s
-            | _ -> "Unexpected" // reject anything else
-        |> Int32.TryParse        
-        |> function
+type Parser = 
+    Parser with
+        static member maybeInt (c:char)   : int option = Parser.maybeInt (string c)
+        static member maybeInt (s:string) : int option = 
+            match Int32.TryParse s with
             | (true , i) -> Some i
             | (false, _) -> None
